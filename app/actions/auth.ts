@@ -27,7 +27,7 @@ export async function signOut() {
 export async function completeSignup(email: string, password: string) {
   const supabase = await createClient();
 
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
   });
@@ -36,5 +36,15 @@ export async function completeSignup(email: string, password: string) {
     return { error: error.message };
   }
 
-  redirect('/');
+  const user = data.user;
+
+  if (user) {
+    await supabase.from('profiles').insert({
+      id: user.id,
+      email: user.email,
+      role: 'client',
+    });
+  }
+
+  redirect('/dashboard');
 }
