@@ -39,7 +39,7 @@ export async function completeSignup(email: string, password: string) {
   const user = data.user;
 
   if (user) {
-    await supabase.from('profiles').insert({
+    await supabase.from('Profiles').insert({
       id: user.id,
       email: user.email,
       role: 'client',
