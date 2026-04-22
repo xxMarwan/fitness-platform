@@ -26,7 +26,7 @@ export async function signOut() {
   redirect('/login');
 }
 
-// إنشاء حساب + حفظ في Profiles
+// إنشاء حساب جديد + حفظه في profiles
 export async function completeSignup(email: string, password: string) {
   const supabase = await createClient();
 
@@ -42,13 +42,11 @@ export async function completeSignup(email: string, password: string) {
   const user = data.user;
 
   if (user) {
-    const { error: profileError } = await supabase
-      .from('Profiles') // مهم P كبيرة
-      .insert({
-        id: user.id,
-        email: user.email,
-        role: 'client',
-      });
+    const { error: profileError } = await supabase.from('profiles').insert({
+      id: user.id,
+      email: user.email,
+      role: 'client',
+    });
 
     if (profileError) {
       return { error: profileError.message };
